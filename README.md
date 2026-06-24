@@ -42,6 +42,11 @@ The research and analysis deliverables for Phase 0 are documented here:
 - ✅ Refactored `HealthcareContextBuilder` to map raw database models into dedicated Context Packs for each agent.
 - ✅ Added a visual Knowledge Graph Mapping UI to the React frontend to display dynamic Context Packs.
 
+### Phase 4: Multi-Agent Collaboration
+- ✅ Upgraded orchestrator to a collaborative pipeline with a `SharedCaseMemory` schema passed between agents.
+- ✅ Enabled downstream agents to alter decisions based on upstream flags (e.g. `HIGH_RISK_PATIENT` escalates claims).
+- ✅ Introduced a `ConsolidatorAgent` that synthesizes cross-domain observations into a single definitive `ConsolidatedCaseOutput`.
+
 ## What AHIP Is
 
 AHIP is an Agentic Healthcare Operations Intelligence Platform.
