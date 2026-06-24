@@ -1,6 +1,8 @@
 from app.application.agents.patient_journey_agent import PatientJourneyAgent
 from app.application.agents.claims_review_agent import ClaimsReviewAgent
 from app.application.agents.provider_contract_agent import ProviderContractAgent
+from app.application.agents.consolidator_agent import ConsolidatorAgent
+from app.domain.schemas.schemas import SharedCaseMemory
 from app.domain.schemas.context_schemas import PatientJourneyContextPack, ClaimContextPack, ProviderContractContextPack
 
 def test_patient_journey_agent():
@@ -46,9 +48,6 @@ def test_missing_context():
     assert output.risk_level == "High"
     assert output.observation == "Claim not found"
 
-from app.domain.schemas.schemas import SharedCaseMemory
-from app.application.agents.consolidator_agent import ConsolidatorAgent
-
 def test_collaboration_pipeline():
     memory = SharedCaseMemory(case_id="COLLAB_TEST")
     
@@ -74,4 +73,5 @@ def test_collaboration_pipeline():
     cons_output = cons_agent.run("COLLAB_TEST", memory)
     
     assert cons_output.final_risk_level == "High"
-    assert "High risk patient" in cons_output.recommended_action
+    assert "manual high-risk review" in cons_output.recommended_action
+    assert cons_output.routing_destination == "Senior Claims Analyst"
