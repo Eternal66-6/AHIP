@@ -33,3 +33,9 @@ export async function getProviders() {
   if (!response.ok) throw new Error('Failed to load providers')
   return response.json()
 }
+
+export async function getCaseContextMapping(caseId: string) {
+  const response = await fetch(`${API_BASE_URL}/agents/context/${caseId}`)
+  if (!response.ok) throw new Error('Failed to load case context mapping')
+  return response.json()
+}

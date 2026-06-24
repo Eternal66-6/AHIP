@@ -26,3 +26,16 @@ def get_agent_logs(db: Session = Depends(get_db)):
         }
         for log in logs
     ]
+
+from app.application.context.context_builder import HealthcareContextBuilder
+
+@router.get("/context/{case_id}")
+def get_case_context_mapping(case_id: str, db: Session = Depends(get_db)):
+    builder = HealthcareContextBuilder(db)
+    return {
+        "case_id": case_id,
+        "patient_journey": builder.build_patient_journey_context(case_id).model_dump(),
+        "claim": builder.build_claim_context(case_id).model_dump(),
+        "provider_contract": builder.build_provider_contract_context(case_id).model_dump(),
+        "compliance": builder.build_compliance_context(case_id).model_dump(),
+    }

@@ -38,5 +38,5 @@ class WorkflowOrchestrator:
         return {
             "case_id": case_id,
             "agent_outputs": [o.model_dump() for o in agent_outputs],
-            "summary": "Phase 2 multi-agent review completed and logged to memory."
+            "summary": "Phase 3 multi-agent review completed with Context Packs."
         }

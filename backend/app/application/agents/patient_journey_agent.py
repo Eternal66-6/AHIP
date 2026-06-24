@@ -1,20 +1,20 @@
 from app.application.agents.base_agent import BaseHealthcareAgent
 from app.domain.schemas.schemas import AgentOutput
+from app.domain.schemas.context_schemas import PatientJourneyContextPack
 
 class PatientJourneyAgent(BaseHealthcareAgent):
     agent_name = "Patient Journey Agent"
 
-    def run(self, case_id: str, context: dict) -> AgentOutput:
-        if "error" in context:
+    def run(self, case_id: str, context: PatientJourneyContextPack) -> AgentOutput:
+        if context.has_error:
             return AgentOutput(
                 agent_name=self.agent_name, case_id=case_id, risk_level="High",
-                observation=context["error"], recommendation="Investigate missing data.",
+                observation=context.error_message or "Unknown Error", recommendation="Investigate missing data.",
                 evidence=[], confidence=1.0, next_owner="System Admin"
             )
 
-        patient = context.get("patient", {})
-        risk_category = patient.get("risk_category", "Standard")
-        stage = context.get("journey_stage", "Unknown")
+        risk_category = context.risk_category or "Standard"
+        stage = context.journey_stage or "Unknown"
         
         is_high_risk = risk_category == "High"
         

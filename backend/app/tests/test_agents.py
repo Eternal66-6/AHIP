@@ -1,13 +1,15 @@
 from app.application.agents.patient_journey_agent import PatientJourneyAgent
 from app.application.agents.claims_review_agent import ClaimsReviewAgent
 from app.application.agents.provider_contract_agent import ProviderContractAgent
+from app.domain.schemas.context_schemas import PatientJourneyContextPack, ClaimContextPack, ProviderContractContextPack
 
 def test_patient_journey_agent():
     agent = PatientJourneyAgent()
-    context = {
-        "patient": {"risk_category": "High"},
-        "journey_stage": "Claim Review",
-    }
+    context = PatientJourneyContextPack(
+        case_id="TEST_CASE",
+        risk_category="High",
+        journey_stage="Claim Review"
+    )
     output = agent.run("TEST_CASE", context)
     assert output.agent_name == "Patient Journey Agent"
     assert output.risk_level == "High"
@@ -15,13 +17,12 @@ def test_patient_journey_agent():
 
 def test_claims_review_agent():
     agent = ClaimsReviewAgent()
-    context = {
-        "claim": {
-            "claim_status": "Pended",
-            "amount": 2000,
-            "cpt_codes": []
-        }
-    }
+    context = ClaimContextPack(
+        case_id="TEST_CASE",
+        claim_status="Pended",
+        amount=2000,
+        cpt_codes=[]
+    )
     output = agent.run("TEST_CASE", context)
     assert output.agent_name == "Claims Review Agent"
     assert output.risk_level == "High"
@@ -29,11 +30,10 @@ def test_claims_review_agent():
 
 def test_provider_contract_agent():
     agent = ProviderContractAgent()
-    context = {
-        "provider": {
-            "network_status": "Out-of-Network"
-        }
-    }
+    context = ProviderContractContextPack(
+        case_id="TEST_CASE",
+        network_status="Out-of-Network"
+    )
     output = agent.run("TEST_CASE", context)
     assert output.agent_name == "Provider Contract Agent"
     assert output.risk_level == "High"
@@ -41,6 +41,7 @@ def test_provider_contract_agent():
 
 def test_missing_context():
     agent = PatientJourneyAgent()
-    output = agent.run("TEST_CASE", {"error": "Claim not found"})
+    context = PatientJourneyContextPack(case_id="TEST", has_error=True, error_message="Claim not found")
+    output = agent.run("TEST_CASE", context)
     assert output.risk_level == "High"
     assert output.observation == "Claim not found"

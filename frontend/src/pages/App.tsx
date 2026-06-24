@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders } from '../api/client'
+import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders, getCaseContextMapping } from '../api/client'
 import { MetricCard } from '../components/MetricCard'
 import type { DashboardSummary, Patient, Claim, Provider } from '../types/ahip'
 
@@ -9,6 +9,10 @@ export function App() {
   const [claims, setClaims] = useState<Claim[]>([])
   const [providers, setProviders] = useState<Provider[]>([])
   const [agentResult, setAgentResult] = useState<any>(null)
+  
+  // Graph mapping state
+  const [contextMapping, setContextMapping] = useState<any>(null)
+  const [caseIdInput, setCaseIdInput] = useState('CLM2001')
 
   useEffect(() => {
     getDashboardSummary().then(setSummary).catch(console.error)
@@ -18,7 +22,11 @@ export function App() {
   }, [])
 
   async function handleRunAgents() {
-    setAgentResult(await runCaseReview('CASE-001'))
+    setAgentResult(await runCaseReview(caseIdInput))
+  }
+
+  async function handleViewContextMapping() {
+    setContextMapping(await getCaseContextMapping(caseIdInput))
   }
 
   return (
@@ -126,10 +134,47 @@ export function App() {
         </section>
 
         <section className="section">
-          <h3>Sample Multi-Agent Workflow</h3>
-          <p>Run a Phase 0 sample case review.</p>
-          <button onClick={handleRunAgents}>Run Sample Case Review</button>
-          {agentResult && <pre>{JSON.stringify(agentResult, null, 2)}</pre>}
+          <h3>Phase 3: Knowledge Graph Mapping</h3>
+          <p>Enter a Claim ID to load the context packs dynamically extracted from the database.</p>
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <input 
+              type="text" 
+              value={caseIdInput} 
+              onChange={(e) => setCaseIdInput(e.target.value)}
+              placeholder="e.g. CLM2001"
+            />
+            <button onClick={handleViewContextMapping}>View Context Packs</button>
+            <button onClick={handleRunAgents}>Run Agents with Memory</button>
+          </div>
+          {contextMapping && (
+             <div className="graph-container">
+               <h4>Generated Context Packs for {contextMapping.case_id}</h4>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div className="box" style={{ background: '#ecfeff', padding: '15px' }}>
+                     <h5>🏥 Patient Journey Pack</h5>
+                     <pre>{JSON.stringify(contextMapping.patient_journey, null, 2)}</pre>
+                  </div>
+                  <div className="box" style={{ background: '#fdf4ff', padding: '15px' }}>
+                     <h5>📄 Claim Context Pack</h5>
+                     <pre>{JSON.stringify(contextMapping.claim, null, 2)}</pre>
+                  </div>
+                  <div className="box" style={{ background: '#f0fdf4', padding: '15px' }}>
+                     <h5>🤝 Provider Contract Pack</h5>
+                     <pre>{JSON.stringify(contextMapping.provider_contract, null, 2)}</pre>
+                  </div>
+                  <div className="box" style={{ background: '#fff7ed', padding: '15px' }}>
+                     <h5>🛡️ Compliance Context Pack</h5>
+                     <pre>{JSON.stringify(contextMapping.compliance, null, 2)}</pre>
+                  </div>
+               </div>
+             </div>
+          )}
+          {agentResult && (
+             <div style={{ marginTop: '20px' }}>
+               <h4>Agent Execution Logs</h4>
+               <pre>{JSON.stringify(agentResult, null, 2)}</pre>
+             </div>
+          )}
         </section>
 
         <section className="section">

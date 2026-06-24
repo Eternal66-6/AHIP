@@ -1,21 +1,21 @@
 from app.application.agents.base_agent import BaseHealthcareAgent
 from app.domain.schemas.schemas import AgentOutput
+from app.domain.schemas.context_schemas import ClaimContextPack
 
 class ClaimsReviewAgent(BaseHealthcareAgent):
     agent_name = "Claims Review Agent"
 
-    def run(self, case_id: str, context: dict) -> AgentOutput:
-        if "error" in context:
+    def run(self, case_id: str, context: ClaimContextPack) -> AgentOutput:
+        if context.has_error:
             return AgentOutput(
                 agent_name=self.agent_name, case_id=case_id, risk_level="High",
-                observation=context["error"], recommendation="Investigate missing claim.",
+                observation=context.error_message or "Unknown Error", recommendation="Investigate missing claim.",
                 evidence=[], confidence=1.0, next_owner="System Admin"
             )
 
-        claim = context.get("claim", {})
-        status = claim.get("claim_status", "Unknown")
-        amount = claim.get("amount", 0)
-        cpt_codes = claim.get("cpt_codes", [])
+        status = context.claim_status or "Unknown"
+        amount = context.amount or 0.0
+        cpt_codes = context.cpt_codes
 
         is_pended = status == "Pended"
         missing_cpt = len(cpt_codes) == 0
