@@ -48,7 +48,7 @@ export function App() {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Member ID</th>
                 <th>Name</th>
                 <th>Plan</th>
                 <th>Status</th>
@@ -57,8 +57,8 @@ export function App() {
             </thead>
             <tbody>
               {patients.map(p => (
-                <tr key={p.patient_id}>
-                  <td>{p.patient_id}</td>
+                <tr key={p.id}>
+                  <td>{p.member_id}</td>
                   <td>{p.name}</td>
                   <td>{p.plan_id}</td>
                   <td>{p.status}</td>
@@ -74,23 +74,27 @@ export function App() {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Patient</th>
-                <th>Provider</th>
+                <th>Claim ID</th>
+                <th>Patient Member ID</th>
+                <th>Provider ID</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Amount</th>
+                <th>CPT Codes</th>
+                <th>ICD Codes</th>
               </tr>
             </thead>
             <tbody>
               {claims.map(c => (
-                <tr key={c.claim_id}>
+                <tr key={c.id}>
                   <td>{c.claim_id}</td>
-                  <td>{c.patient_id}</td>
+                  <td>{c.patient_member_id}</td>
                   <td>{c.provider_id}</td>
                   <td>{c.service_date}</td>
                   <td>{c.claim_status}</td>
                   <td>${c.amount}</td>
+                  <td>{c.cpt_codes?.join(', ')}</td>
+                  <td>{c.icd_codes?.join(', ')}</td>
                 </tr>
               ))}
             </tbody>
@@ -110,7 +114,7 @@ export function App() {
             </thead>
             <tbody>
               {providers.map(p => (
-                <tr key={p.provider_id}>
+                <tr key={p.id}>
                   <td>{p.provider_id}</td>
                   <td>{p.name}</td>
                   <td>{p.type}</td>

@@ -2,15 +2,16 @@ from pydantic import BaseModel
 from datetime import date
 
 class PatientBase(BaseModel):
-    patient_id: str
+    member_id: str
     name: str
     plan_id: str
     status: str
     risk_category: str
 
 class Patient(PatientBase):
+    id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ProviderBase(BaseModel):
     provider_id: str
@@ -19,20 +20,24 @@ class ProviderBase(BaseModel):
     network_status: str
 
 class Provider(ProviderBase):
+    id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ClaimBase(BaseModel):
     claim_id: str
-    patient_id: str
+    patient_member_id: str
     provider_id: str
     service_date: date
     claim_status: str
-    amount: float
+    amount: int
+    cpt_codes: list[str]
+    icd_codes: list[str]
 
 class Claim(ClaimBase):
+    id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AgentRunRequest(BaseModel):
     case_id: str

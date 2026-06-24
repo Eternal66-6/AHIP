@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.routes import health, patients, claims, agents, dashboard, providers
-from app.infrastructure.database.seed import init_db
+from app.infrastructure.database.seed import seed_db
 
 app = FastAPI(
     title="AHIP API",
@@ -11,7 +11,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    seed_db()
 
 app.add_middleware(
     CORSMiddleware,

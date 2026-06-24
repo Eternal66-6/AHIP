@@ -6,24 +6,29 @@ export type DashboardSummary = {
   compliance_gaps: number
 }
 
-export type Patient = {
-  patient_id: string
+export interface Patient {
+  id: number
+  member_id: string
   name: string
   plan_id: string
   status: string
   risk_category: string
 }
 
-export type Claim = {
+export interface Claim {
+  id: number
   claim_id: string
-  patient_id: string
+  patient_member_id: string
   provider_id: string
   service_date: string
   claim_status: string
   amount: number
+  cpt_codes: string[]
+  icd_codes: string[]
 }
 
-export type Provider = {
+export interface Provider {
+  id: number
   provider_id: string
   name: string
   type: string

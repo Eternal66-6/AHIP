@@ -11,9 +11,9 @@ def list_patients(db: Session = Depends(get_db)):
     patients = db.query(PatientModel).all()
     return patients
 
-@router.get("/{patient_id}", response_model=Patient)
-def get_patient(patient_id: str, db: Session = Depends(get_db)):
-    patient = db.query(PatientModel).filter(PatientModel.patient_id == patient_id).first()
+@router.get("/{member_id}", response_model=Patient)
+def get_patient(member_id: str, db: Session = Depends(get_db)):
+    patient = db.query(PatientModel).filter(PatientModel.member_id == member_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
     return patient
