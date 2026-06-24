@@ -29,9 +29,9 @@ export function App() {
         <p>Agentic AI • Memory • Context • Decisions</p>
       </aside>
       <main className="main">
-        <span className="badge">Phase 0 Base</span>
+        <span className="badge">Phase 1 Data Foundation</span>
         <h2>AHIP Operations Dashboard</h2>
-        <p>This is the frontend baseline for the healthcare workflow intelligence platform.</p>
+        <p>This is the frontend baseline for the healthcare workflow intelligence platform, now powered by the live Phase 1 data models.</p>
 
         {summary && (
           <div className="grid">
