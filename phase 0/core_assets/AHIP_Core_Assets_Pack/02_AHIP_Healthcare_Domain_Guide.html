@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>02 – AHIP Healthcare Domain Guide</title>
+<style>
+:root{--primary:#0f3d5e;--secondary:#155e75;--accent:#e0f2fe;--border:#cbd5e1;--bg:#f8fafc;--text:#1f2937}
+body{font-family:Arial,Helvetica,sans-serif;line-height:1.62;color:var(--text);max-width:1040px;margin:0 auto;padding:34px;background:#fff}
+h1{color:var(--primary);border-bottom:4px solid var(--primary);padding-bottom:12px}
+h2{color:var(--secondary);margin-top:32px;border-bottom:1px solid #e5e7eb;padding-bottom:6px}
+h3{color:#164e63;margin-top:24px}
+.box{background:var(--bg);border-left:6px solid var(--primary);padding:18px 22px;margin:22px 0}
+.callout{background:#ecfeff;border:1px solid #a5f3fc;padding:14px 18px;border-radius:8px;margin:18px 0}
+.warn{background:#fff7ed;border:1px solid #fed7aa;padding:14px 18px;border-radius:8px;margin:18px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0}
+th,td{border:1px solid var(--border);padding:10px;vertical-align:top}
+th{background:#f1f5f9;color:#0f172a}
+code{background:#f1f5f9;padding:2px 5px;border-radius:4px}
+ul,ol{margin-top:8px}
+li{margin:6px 0}
+.footer{margin-top:42px;border-top:1px solid #e5e7eb;padding-top:14px;color:#64748b;font-size:14px}
+.badge{display:inline-block;background:var(--accent);color:#075985;padding:6px 10px;border-radius:6px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>02 – AHIP Healthcare Domain Guide</h1>
+<div class="box">
+<p><span class="badge">AHIP – AI Healthcare Intelligence Platform</span></p>
+<p><strong>Healthcare payer and operations concepts interns must understand before building.</strong></p>
+<p>Real Rails Agentic AI Internship Project | Core Assets Pack</p>
+</div>
+
+<h2>1. Why Domain Learning Matters</h2>
+<p>AHIP is valuable only if it understands real healthcare operations. Interns do not need to become healthcare experts, but they must understand the basic workflows and terminology enough to model agents responsibly.</p>
+
+<h2>2. Healthcare Payer Basics</h2>
+<p>A healthcare payer is an organization that pays or reimburses healthcare claims. Examples include commercial insurers, Medicare-related plans, Medicaid managed care organizations and government-sponsored health plans.</p>
+
+<h2>3. Core Domain Entities</h2>
+<table>
+<tr><th>Entity</th><th>Meaning in AHIP</th></tr>
+<tr><td>Member / Patient</td><td>The person receiving healthcare services</td></tr>
+<tr><td>Provider</td><td>Doctor, hospital, clinic, facility or healthcare service provider</td></tr>
+<tr><td>Claim</td><td>Request for payment for a healthcare service</td></tr>
+<tr><td>Benefit Plan</td><td>Defines what services are covered, limits, rules and eligibility</td></tr>
+<tr><td>Provider Contract</td><td>Defines payment terms, network rules and contractual arrangements</td></tr>
+<tr><td>Operational Provision</td><td>Configuration or business rule that affects claims and benefits</td></tr>
+<tr><td>Care Task</td><td>Operational follow-up or care coordination action</td></tr>
+<tr><td>Workflow Event</td><td>A timestamped event showing movement in a process</td></tr>
+</table>
+
+<h2>4. Claims Lifecycle – Simplified</h2>
+<ol>
+<li>Patient receives service from provider.</li>
+<li>Provider submits claim.</li>
+<li>System checks eligibility and benefit coverage.</li>
+<li>Contract and pricing rules are applied.</li>
+<li>Claim may pass, pend, deny or require manual review.</li>
+<li>Payment or explanation is generated.</li>
+<li>Exceptions may require documentation, correction or escalation.</li>
+</ol>
+
+<h2>5. Provider Contract Workflow</h2>
+<p>Provider contracts define how providers are reimbursed and under what conditions. Errors in contract configuration can lead to incorrect payments, claim denials, downstream rework or compliance issues.</p>
+
+<h3>Common Contract Issues for MVP Scenarios</h3>
+<ul>
+<li>Provider not mapped to correct contract.</li>
+<li>Contract effective date mismatch.</li>
+<li>Incorrect network status.</li>
+<li>Benefit plan and contract mismatch.</li>
+<li>Missing operational provision.</li>
+<li>Rate or rule not aligned to claim scenario.</li>
+</ul>
+
+<h2>6. Benefit Plan Workflow</h2>
+<p>Benefit plans define what is covered. For AHIP, the focus is not clinical judgment. The focus is whether workflow data has enough information to validate coverage-related operations.</p>
+
+<h3>Benefit Validation Examples</h3>
+<ul>
+<li>Is the patient covered on the service date?</li>
+<li>Is the service linked to the correct benefit plan?</li>
+<li>Is prior authorization required?</li>
+<li>Is there a missing document or review flag?</li>
+<li>Does the claim need manual review?</li>
+</ul>
+
+<h2>7. Care Coordination Workflow</h2>
+<p>Care coordination ensures follow-up actions happen after healthcare events. In the AHIP MVP, care coordination can be represented through tasks, due dates, workflow status and escalation rules.</p>
+
+<h2>8. Compliance and Governance</h2>
+<p>Healthcare workflows require traceability. AHIP should record why an agent raised an issue, what context was used, what action was recommended, who accepted or overrode it and what happened next.</p>
+
+<h2>9. Healthcare Learning Checklist</h2>
+<ul>
+<li>Understand payer vs provider roles.</li>
+<li>Understand claims lifecycle basics.</li>
+<li>Understand benefit plan and provider contract meaning.</li>
+<li>Understand why manual review happens.</li>
+<li>Understand why audit trail matters.</li>
+<li>Understand the difference between clinical decisions and operational workflow decisions.</li>
+</ul>
+
+<h2>10. MVP Sample Scenario Ideas</h2>
+<table>
+<tr><th>Scenario</th><th>Agent Opportunity</th></tr>
+<tr><td>Claim pending due to missing provider contract mapping</td><td>Provider Contract Agent + Claims Review Agent</td></tr>
+<tr><td>Patient has overdue follow-up after discharge</td><td>Patient Journey Agent + Care Gap Agent</td></tr>
+<tr><td>Benefit plan requires authorization but no authorization record exists</td><td>Benefit Validation Agent + Compliance Agent</td></tr>
+<tr><td>High-risk case delayed across multiple workflow stages</td><td>Escalation Agent + Decision Layer</td></tr>
+</table>
+
+<div class="footer">
+<p>Prepared for the Real Rails Agentic AI Internship Program – AHIP Track.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>08 – AHIP Master Prompt Framework</title>
+<style>
+:root{--primary:#0f3d5e;--secondary:#155e75;--accent:#e0f2fe;--border:#cbd5e1;--bg:#f8fafc;--text:#1f2937}
+body{font-family:Arial,Helvetica,sans-serif;line-height:1.62;color:var(--text);max-width:1040px;margin:0 auto;padding:34px;background:#fff}
+h1{color:var(--primary);border-bottom:4px solid var(--primary);padding-bottom:12px}
+h2{color:var(--secondary);margin-top:32px;border-bottom:1px solid #e5e7eb;padding-bottom:6px}
+h3{color:#164e63;margin-top:24px}
+.box{background:var(--bg);border-left:6px solid var(--primary);padding:18px 22px;margin:22px 0}
+.callout{background:#ecfeff;border:1px solid #a5f3fc;padding:14px 18px;border-radius:8px;margin:18px 0}
+.warn{background:#fff7ed;border:1px solid #fed7aa;padding:14px 18px;border-radius:8px;margin:18px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0}
+th,td{border:1px solid var(--border);padding:10px;vertical-align:top}
+th{background:#f1f5f9;color:#0f172a}
+code{background:#f1f5f9;padding:2px 5px;border-radius:4px}
+ul,ol{margin-top:8px}
+li{margin:6px 0}
+.footer{margin-top:42px;border-top:1px solid #e5e7eb;padding-top:14px;color:#64748b;font-size:14px}
+.badge{display:inline-block;background:var(--accent);color:#075985;padding:6px 10px;border-radius:6px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>08 – AHIP Master Prompt Framework</h1>
+<div class="box">
+<p><span class="badge">AHIP – AI Healthcare Intelligence Platform</span></p>
+<p><strong>Reusable AI prompt system and feeder document model for AHIP development.</strong></p>
+<p>Real Rails Agentic AI Internship Project | Core Assets Pack</p>
+</div>
+
+<h2>1. Purpose</h2>
+<p>This file helps interns use AI consistently while building AHIP. The goal is to make AI a structured engineering assistant, not a random code generator.</p>
+
+<h2>2. Mandatory Feeder Documents</h2>
+<ul>
+<li>AHIP Product Bible</li>
+<li>AHIP Healthcare Domain Guide</li>
+<li>AHIP Agentic AI Guide</li>
+<li>AHIP Architecture Guide</li>
+<li>AHIP Execution Protocol</li>
+<li>Current Phase HTML</li>
+<li>Latest Repomix</li>
+</ul>
+
+<h2>3. Phase Start Prompt</h2>
+<pre><code>Act as an Enterprise Healthcare Product Architect, Agentic AI Architect and Real Rails Internship Mentor.
+
+We are building AHIP – AI Healthcare Intelligence Platform.
+
+This is not a chatbot.
+This is not a generic RAG system.
+This is a healthcare workflow intelligence platform using multi-agent systems, agent memory, context engineering, decision intelligence and enterprise workflows.
+
+Current Phase:
+[Paste phase name and objective]
+
+Use the attached:
+- Product Bible
+- Healthcare Domain Guide
+- Agentic AI Guide
+- Architecture Guide
+- Execution Protocol
+- Latest Repomix
+
+First explain:
+1. What the phase is trying to achieve
+2. What healthcare concepts matter here
+3. What Agentic AI concepts matter here
+4. What files/modules likely need changes
+5. Step-by-step implementation plan
+6. Validation checklist
+
+Do not start coding until the plan is clear.</code></pre>
+
+<h2>4. Additional Input Prompt</h2>
+<pre><code>Before implementing this phase, ask me whether I have any phase-specific documents, sample data, screenshots, workflow notes, business rules, healthcare examples, or client-specific inputs to add.
+
+If I provide them, incorporate them.
+If I do not provide them, continue with the existing AHIP assumptions and clearly list assumptions.</code></pre>
+
+<h2>5. Debugging Prompt</h2>
+<pre><code>I am working on AHIP Phase X.
+
+Issue:
+[Paste issue]
+
+Error / Output:
+[Paste logs]
+
+What I already tried:
+[List attempts]
+
+Relevant files:
+[Paste file snippets or use Repomix]
+
+Please provide:
+1. Root cause possibilities
+2. Most likely cause
+3. Step-by-step fix
+4. Exact files to check
+5. Validation steps
+6. What not to change</code></pre>
+
+<h2>6. Agent Design Prompt</h2>
+<pre><code>Design an AHIP agent for the following healthcare workflow:
+
+Workflow:
+[Describe workflow]
+
+Agent Name:
+[Name]
+
+Provide:
+1. Agent goal
+2. Responsibility
+3. Inputs
+4. Context pack
+5. Output schema
+6. Memory fields
+7. Validation rules
+8. Sample output
+9. Failure scenarios
+10. How this agent collaborates with other AHIP agents</code></pre>
+
+<h2>7. Completion Prompt</h2>
+<pre><code>Generate a GitHub Discussion completion post for AHIP Phase X.
+
+Include:
+- Completed items
+- Files/modules changed
+- Healthcare concepts implemented
+- Agentic AI concepts implemented
+- Validation performed
+- Screenshots/logs placeholder
+- Known limitations
+- Next phase readiness
+
+Keep it professional and concise.</code></pre>
+
+<h2>8. Golden Rule</h2>
+<div class="callout">
+<p>Every AI response must be evaluated against the AHIP goal: healthcare workflow intelligence using agents, memory, context and explainable decision support.</p>
+</div>
+
+<div class="footer">
+<p>Prepared for the Real Rails Agentic AI Internship Program – AHIP Track.</p>
+</div>
+</body>
+</html>

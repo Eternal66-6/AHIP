@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>05 – AHIP Sample Data Guide</title>
+<style>
+:root{--primary:#0f3d5e;--secondary:#155e75;--accent:#e0f2fe;--border:#cbd5e1;--bg:#f8fafc;--text:#1f2937}
+body{font-family:Arial,Helvetica,sans-serif;line-height:1.62;color:var(--text);max-width:1080px;margin:0 auto;padding:34px;background:#fff}
+h1{color:var(--primary);border-bottom:4px solid var(--primary);padding-bottom:12px}
+h2{color:var(--secondary);margin-top:32px;border-bottom:1px solid #e5e7eb;padding-bottom:6px}
+h3{color:#164e63;margin-top:24px}
+.box{background:var(--bg);border-left:6px solid var(--primary);padding:18px 22px;margin:22px 0}
+.callout{background:#ecfeff;border:1px solid #a5f3fc;padding:14px 18px;border-radius:8px;margin:18px 0}
+.warn{background:#fff7ed;border:1px solid #fed7aa;padding:14px 18px;border-radius:8px;margin:18px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0}
+th,td{border:1px solid var(--border);padding:10px;vertical-align:top}
+th{background:#f1f5f9;color:#0f172a}
+code,pre{background:#f1f5f9;border-radius:6px}
+code{padding:2px 5px}
+pre{padding:14px;overflow:auto}
+ul,ol{margin-top:8px}
+li{margin:6px 0}
+.footer{margin-top:42px;border-top:1px solid #e5e7eb;padding-top:14px;color:#64748b;font-size:14px}
+.badge{display:inline-block;background:var(--accent);color:#075985;padding:6px 10px;border-radius:6px;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>05 – AHIP Sample Data Guide</h1>
+<div class="box">
+<p><span class="badge">AHIP – AI Healthcare Intelligence Platform</span></p>
+<p><strong>Sample dataset structure for AHIP MVP demo and testing.</strong></p>
+<p>Real Rails Agentic AI Internship Project | Enhancement Pack</p>
+</div>
+
+<h2>Purpose</h2>
+<p>The AHIP MVP should use realistic but fictional sample data. Do not use real patient data.</p>
+
+<h2>Sample Data Files</h2>
+<table>
+<tr><th>File</th><th>Purpose</th><th>Example Fields</th></tr>
+<tr><td>patients.csv</td><td>Patient/member records</td><td>patient_id, name, plan_id, status, risk_category</td></tr>
+<tr><td>providers.csv</td><td>Provider/facility records</td><td>provider_id, name, type, network_status</td></tr>
+<tr><td>claims.csv</td><td>Claim records</td><td>claim_id, patient_id, provider_id, service_date, claim_status, amount</td></tr>
+<tr><td>benefit_plans.csv</td><td>Benefit plan rules</td><td>plan_id, plan_name, auth_required, coverage_status</td></tr>
+<tr><td>provider_contracts.csv</td><td>Contract mapping</td><td>contract_id, provider_id, effective_from, effective_to, status</td></tr>
+<tr><td>workflow_events.csv</td><td>Workflow timeline</td><td>event_id, case_id, event_type, created_at, payload</td></tr>
+<tr><td>care_tasks.csv</td><td>Follow-up tasks</td><td>task_id, patient_id, due_date, status, owner</td></tr>
+</table>
+
+<h2>Demo Scenarios To Include</h2>
+<ul>
+<li>Claim pended because provider contract is missing.</li>
+<li>Claim requires prior authorization but document is missing.</li>
+<li>Patient follow-up task overdue.</li>
+<li>Case aged beyond threshold and requires escalation.</li>
+<li>Agent recommendation overridden by user with reason.</li>
+</ul>
+
+<div class="warn">
+<p><strong>Important:</strong> Use fictional names and fictional IDs. Do not use real PHI or patient information.</p>
+</div>
+
+<div class="footer">
+<p>Prepared for Real Rails Agentic AI Internship Program – AHIP Track.</p>
+</div>
+</body>
+</html>
