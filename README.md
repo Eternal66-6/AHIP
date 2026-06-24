@@ -47,6 +47,11 @@ The research and analysis deliverables for Phase 0 are documented here:
 - ✅ Enabled downstream agents to alter decisions based on upstream flags (e.g. `HIGH_RISK_PATIENT` escalates claims).
 - ✅ Introduced a `ConsolidatorAgent` that synthesizes cross-domain observations into a single definitive `ConsolidatedCaseOutput`.
 
+### Phase 5: Decision & Escalation Layer
+- ✅ Built a `GET /priority-queue` API that functions as a Risk Scoring Model, sorting cases by SLA severity.
+- ✅ Designed the React **Priority Queue Dashboard** to provide operations analysts with deep explainability for AI routing decisions.
+- ✅ Implemented human-in-the-loop validation via a `POST /decision` API allowing users to Accept or Override the AI's recommendation.
+
 ## What AHIP Is
 
 AHIP is an Agentic Healthcare Operations Intelligence Platform.

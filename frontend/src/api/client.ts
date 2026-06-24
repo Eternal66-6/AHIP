@@ -39,3 +39,19 @@ export async function getCaseContextMapping(caseId: string) {
   if (!response.ok) throw new Error('Failed to load case context mapping')
   return response.json()
 }
+
+export async function getPriorityQueue() {
+  const response = await fetch(`${API_BASE_URL}/agents/priority-queue`)
+  if (!response.ok) throw new Error('Failed to load priority queue')
+  return response.json()
+}
+
+export async function submitDecision(caseId: string, action: string) {
+  const response = await fetch(`${API_BASE_URL}/agents/cases/${caseId}/decision`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ action })
+  })
+  if (!response.ok) throw new Error('Failed to submit decision')
+  return response.json()
+}

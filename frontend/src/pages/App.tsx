@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders, getCaseContextMapping } from '../api/client'
+import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders, getCaseContextMapping, getPriorityQueue, submitDecision } from '../api/client'
 import { MetricCard } from '../components/MetricCard'
 import type { DashboardSummary, Patient, Claim, Provider } from '../types/ahip'
 
@@ -14,19 +14,36 @@ export function App() {
   const [contextMapping, setContextMapping] = useState<any>(null)
   const [caseIdInput, setCaseIdInput] = useState('CLM2001')
 
+  // Phase 5 Queue state
+  const [priorityQueue, setPriorityQueue] = useState<any[]>([])
+
   useEffect(() => {
     getDashboardSummary().then(setSummary).catch(console.error)
     getPatients().then(setPatients).catch(console.error)
     getClaims().then(setClaims).catch(console.error)
     getProviders().then(setProviders).catch(console.error)
+    getPriorityQueue().then(setPriorityQueue).catch(console.error)
   }, [])
 
   async function handleRunAgents() {
     setAgentResult(await runCaseReview(caseIdInput))
+    // Refresh queue after running
+    getPriorityQueue().then(setPriorityQueue).catch(console.error)
   }
 
   async function handleViewContextMapping() {
     setContextMapping(await getCaseContextMapping(caseIdInput))
+  }
+
+  async function handleDecision(caseId: string, action: string) {
+    try {
+      await submitDecision(caseId, action)
+      // Optimistically remove it from UI queue
+      setPriorityQueue(prev => prev.filter(item => item.case_id !== caseId))
+      alert(`Decision recorded: ${action} for ${caseId}`)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return (
@@ -174,6 +191,60 @@ export function App() {
                <h4>Agent Execution Logs</h4>
                <pre>{JSON.stringify(agentResult, null, 2)}</pre>
              </div>
+          )}
+        </section>
+
+        <section className="section">
+          <h3>Phase 5: Decision & Escalation Priority Queue</h3>
+          <p>This queue displays the fully consolidated agent outputs sorted by business impact SLA risk. The AI Recommendation Engine provides full explainability for its routing decisions.</p>
+          
+          <button onClick={() => getPriorityQueue().then(setPriorityQueue).catch(console.error)} style={{marginBottom: '15px'}}>
+            Refresh Priority Queue
+          </button>
+          
+          {priorityQueue.length === 0 ? (
+            <p>No pending cases in the priority queue.</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {priorityQueue.map((item, index) => {
+                const isHighRisk = item.routing_destination === "Senior Claims Analyst" || item.routing_destination?.includes("High");
+                return (
+                  <div key={item.id} className="box" style={{ 
+                    background: isHighRisk ? '#fef2f2' : '#f8fafc',
+                    borderLeftColor: isHighRisk ? '#ef4444' : '#0f3d5e',
+                    padding: '15px'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <h4 style={{ margin: '0 0 10px 0', color: isHighRisk ? '#991b1b' : '#0f3d5e' }}>
+                        Case: {item.case_id} - Queue Rank: #{index + 1}
+                      </h4>
+                      <span className="badge" style={{ background: isHighRisk ? '#fee2e2' : '#e0f2fe', color: isHighRisk ? '#991b1b' : '#075985' }}>
+                        Confidence: {(item.confidence * 100).toFixed(0)}%
+                      </span>
+                    </div>
+                    
+                    <p><strong>Routing Destination:</strong> {item.routing_destination}</p>
+                    <p><strong>Explainability Notes:</strong> {item.summary_observation}</p>
+                    <p><strong>Action Recommended:</strong> {item.recommended_action}</p>
+                    
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                      <button 
+                        onClick={() => handleDecision(item.case_id, 'Accept')}
+                        style={{ background: '#22c55e', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                      >
+                        Accept Recommendation
+                      </button>
+                      <button 
+                        onClick={() => handleDecision(item.case_id, 'Override')}
+                        style={{ background: '#ef4444', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
+                      >
+                        Override / Manual Review
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           )}
         </section>
 

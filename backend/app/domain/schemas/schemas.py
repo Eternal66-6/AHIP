@@ -72,3 +72,6 @@ class ConsolidatedCaseOutput(BaseModel):
     recommended_action: str
     routing_destination: str
     confidence_score: float
+
+class DecisionRequest(BaseModel):
+    action: str  # "Accept" or "Override"
