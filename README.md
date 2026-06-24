@@ -37,6 +37,11 @@ The research and analysis deliverables for Phase 0 are documented here:
 - ✅ Implemented `AgentExecutionLog` to create persistent Agent Memory.
 - ✅ Validated full execution loop via `/api/v1/agents/run-case-review` and logged insights via `/api/v1/agents/logs`.
 
+### Phase 3: Knowledge Layer & Context Engineering
+- ✅ Designed strictly typed Pydantic Context Packs (`PatientJourneyContextPack`, `ClaimContextPack`, etc.) for precise Context Minimization.
+- ✅ Refactored `HealthcareContextBuilder` to map raw database models into dedicated Context Packs for each agent.
+- ✅ Added a visual Knowledge Graph Mapping UI to the React frontend to display dynamic Context Packs.
+
 ## What AHIP Is
 
 AHIP is an Agentic Healthcare Operations Intelligence Platform.
