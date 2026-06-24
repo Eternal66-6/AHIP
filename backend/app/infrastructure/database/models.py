@@ -33,3 +33,15 @@ class Claim(Base):
     
     patient = relationship("Patient", backref="claims")
     provider = relationship("Provider", backref="claims")
+
+class AgentExecutionLog(Base):
+    __tablename__ = "agent_execution_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    case_id = Column(String, index=True)
+    agent_name = Column(String)
+    input_summary = Column(String)
+    observation = Column(String)
+    recommendation = Column(String)
+    confidence = Column(Float)
+    related_workflow_event = Column(String, nullable=True)
+    created_at = Column(String) # We'll just store ISO strings for simplicity, or use DateTime. Let's use String for SQLite ease.

@@ -11,3 +11,8 @@ dist/
 .DS_Store
 *.db
 *.sqlite3
+
+# Stop Cloud Companion from indexing PDF context
+**/backend.pdf
+**/*.pdf
+backend.pdf.bak
