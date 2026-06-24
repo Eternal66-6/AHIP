@@ -58,3 +58,17 @@ class DashboardSummary(BaseModel):
     claim_exceptions: int
     provider_contract_issues: int
     compliance_gaps: int
+
+class SharedCaseMemory(BaseModel):
+    case_id: str
+    observations: list[str] = []
+    highest_risk_level: str = "Low"
+    flags: list[str] = []
+
+class ConsolidatedCaseOutput(BaseModel):
+    case_id: str
+    final_risk_level: str
+    summary_observation: str
+    recommended_action: str
+    routing_destination: str
+    confidence_score: float

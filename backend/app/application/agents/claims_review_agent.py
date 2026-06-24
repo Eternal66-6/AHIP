@@ -1,11 +1,11 @@
 from app.application.agents.base_agent import BaseHealthcareAgent
-from app.domain.schemas.schemas import AgentOutput
+from app.domain.schemas.schemas import AgentOutput, SharedCaseMemory
 from app.domain.schemas.context_schemas import ClaimContextPack
 
 class ClaimsReviewAgent(BaseHealthcareAgent):
     agent_name = "Claims Review Agent"
 
-    def run(self, case_id: str, context: ClaimContextPack) -> AgentOutput:
+    def run(self, case_id: str, context: ClaimContextPack, memory: SharedCaseMemory = None) -> AgentOutput:
         if context.has_error:
             return AgentOutput(
                 agent_name=self.agent_name, case_id=case_id, risk_level="High",
@@ -20,16 +20,29 @@ class ClaimsReviewAgent(BaseHealthcareAgent):
         is_pended = status == "Pended"
         missing_cpt = len(cpt_codes) == 0
         high_amount = amount > 1000
+        
+        # Read from memory to adjust risk
+        patient_high_risk = False
+        if memory and "HIGH_RISK_PATIENT" in memory.flags:
+            patient_high_risk = True
 
-        risk_level = "High" if (is_pended and high_amount) else ("Medium" if is_pended or missing_cpt else "Low")
+        risk_level = "High" if ((is_pended and high_amount) or (is_pended and patient_high_risk)) else ("Medium" if is_pended or missing_cpt else "Low")
         
         obs = f"Claim status is {status}. Amount is ${amount}."
         if missing_cpt:
             obs += " Missing CPT codes."
+        if patient_high_risk:
+            obs += " Evaluated under High Risk Patient context."
 
-        rec = "Review immediately due to high amount and pended status." if risk_level == "High" else "Standard claim review process."
+        rec = "Review immediately due to high risk factors." if risk_level == "High" else "Standard claim review process."
         if missing_cpt:
             rec += " Request updated CPT codes from provider."
+
+        if memory:
+            memory.observations.append(obs)
+            if risk_level == "High":
+                memory.highest_risk_level = "High"
+                memory.flags.append("HIGH_RISK_CLAIM")
 
         return AgentOutput(
             agent_name=self.agent_name,
