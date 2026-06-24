@@ -44,16 +44,26 @@ from app.domain.schemas.schemas import DecisionRequest
 
 @router.get("/priority-queue")
 def get_priority_queue(db: Session = Depends(get_db)):
-    # Fetch all consolidator logs
-    logs = db.query(AgentExecutionLog).filter(AgentExecutionLog.agent_name == "Consolidator Agent").all()
+    # Fetch all consolidator logs, ordered by date descending
+    logs = db.query(AgentExecutionLog).filter(
+        AgentExecutionLog.agent_name == "Consolidator Agent"
+    ).order_by(AgentExecutionLog.created_at.desc()).all()
+    
+    # Deduplicate by case_id (keep only the most recent)
+    seen_cases = set()
+    unique_logs = []
+    for log in logs:
+        if log.case_id not in seen_cases:
+            seen_cases.add(log.case_id)
+            unique_logs.append(log)
     
     # Sort them: High risk first, then by date
     def sort_key(log):
-        is_high_risk = "Senior Claims Analyst" in log.related_workflow_event or "High" in log.observation or "High" in log.recommendation
+        is_high_risk = "Senior Claims Analyst" in (log.related_workflow_event or "") or "High" in (log.observation or "") or "High" in (log.recommendation or "")
         # Return tuple: (0 if High Risk else 1, timestamp desc)
         return (0 if is_high_risk else 1, log.created_at)
         
-    sorted_logs = sorted(logs, key=sort_key)
+    sorted_logs = sorted(unique_logs, key=sort_key)
     
     return [
         {
