@@ -52,21 +52,21 @@ export function CaseDetailPage() {
           <h3>Knowledge Graph Mapping (Phase 3)</h3>
           <p>Generated Context Packs for {contextMapping.case_id}</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-            <div className="box" style={{ background: '#ecfeff', padding: '15px' }}>
-              <h5>🏥 Patient Journey Pack</h5>
-              <pre>{JSON.stringify(contextMapping.patient_journey, null, 2)}</pre>
+            <div className="box" style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '15px' }}>
+              <h5 style={{ margin: '0 0 10px 0', borderBottom: '1px solid #334155', paddingBottom: '10px', color: '#38bdf8' }}>🏥 Patient Journey Pack</h5>
+              <pre style={{ margin: 0 }}>{JSON.stringify(contextMapping.patient_journey, null, 2)}</pre>
             </div>
-            <div className="box" style={{ background: '#fdf4ff', padding: '15px' }}>
-              <h5>📄 Claim Context Pack</h5>
-              <pre>{JSON.stringify(contextMapping.claim, null, 2)}</pre>
+            <div className="box" style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '15px' }}>
+              <h5 style={{ margin: '0 0 10px 0', borderBottom: '1px solid #334155', paddingBottom: '10px', color: '#38bdf8' }}>📄 Claim Context Pack</h5>
+              <pre style={{ margin: 0 }}>{JSON.stringify(contextMapping.claim, null, 2)}</pre>
             </div>
-            <div className="box" style={{ background: '#f0fdf4', padding: '15px' }}>
-              <h5>🤝 Provider Contract Pack</h5>
-              <pre>{JSON.stringify(contextMapping.provider_contract, null, 2)}</pre>
+            <div className="box" style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '15px' }}>
+              <h5 style={{ margin: '0 0 10px 0', borderBottom: '1px solid #334155', paddingBottom: '10px', color: '#38bdf8' }}>🤝 Provider Contract Pack</h5>
+              <pre style={{ margin: 0 }}>{JSON.stringify(contextMapping.provider_contract, null, 2)}</pre>
             </div>
-            <div className="box" style={{ background: '#fff7ed', padding: '15px' }}>
-              <h5>🛡️ Compliance Context Pack</h5>
-              <pre>{JSON.stringify(contextMapping.compliance, null, 2)}</pre>
+            <div className="box" style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '15px' }}>
+              <h5 style={{ margin: '0 0 10px 0', borderBottom: '1px solid #334155', paddingBottom: '10px', color: '#38bdf8' }}>🛡️ Compliance Context Pack</h5>
+              <pre style={{ margin: 0 }}>{JSON.stringify(contextMapping.compliance, null, 2)}</pre>
             </div>
           </div>
         </div>

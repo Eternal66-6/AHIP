@@ -19,12 +19,16 @@ def seed_db():
             p1 = Patient(member_id="MEM1001", name="Alice Smith", plan_id="PLAN_A_GOLD", status="Active", risk_category="Standard")
             p2 = Patient(member_id="MEM1002", name="Bob Jones", plan_id="PLAN_A_GOLD", status="Active", risk_category="High")
             p3 = Patient(member_id="MEM1003", name="Charlie Brown", plan_id="PLAN_B_SILVER", status="Active", risk_category="Standard")
-            db.add_all([p1, p2, p3])
+            p4 = Patient(member_id="MEM1004", name="Diana Prince", plan_id="PLAN_C_BRONZE", status="Active", risk_category="Critical")
+            p5 = Patient(member_id="MEM1005", name="Evan Wright", plan_id="PLAN_A_GOLD", status="Inactive", risk_category="Low")
+            db.add_all([p1, p2, p3, p4, p5])
             
             logger.info("Seeding providers...")
             pr1 = Provider(provider_id="NPI1000003", name="City General Hospital", type="Facility", network_status="In-Network")
             pr2 = Provider(provider_id="NPI1000001", name="Dr. James Wilson", type="Individual", network_status="Out-of-Network")
-            db.add_all([pr1, pr2])
+            pr3 = Provider(provider_id="NPI1000005", name="Westside Clinic", type="Facility", network_status="In-Network")
+            pr4 = Provider(provider_id="NPI1000009", name="Dr. Sarah Connor", type="Individual", network_status="Suspended")
+            db.add_all([pr1, pr2, pr3, pr4])
 
             db.commit()
 
@@ -45,11 +49,41 @@ def seed_db():
                 provider_id="NPI1000001", 
                 service_date=date(2023, 10, 5), 
                 claim_status="Submitted", 
-                amount=1500,
-                cpt_codes=["43239"],
-                icd_codes=[]
+                amount=15000,
+                cpt_codes=["43239", "00811"],
+                icd_codes=["K21.9"]
             )
-            db.add_all([c1, c2])
+            c3 = Claim(
+                claim_id="CLM2003", 
+                patient_member_id="MEM1004", 
+                provider_id="NPI1000009", 
+                service_date=date(2023, 10, 8), 
+                claim_status="Denied", 
+                amount=8500,
+                cpt_codes=["70450"],
+                icd_codes=["R51"]
+            )
+            c4 = Claim(
+                claim_id="CLM2004", 
+                patient_member_id="MEM1003", 
+                provider_id="NPI1000005", 
+                service_date=date(2023, 10, 12), 
+                claim_status="Approved", 
+                amount=120,
+                cpt_codes=["99212"],
+                icd_codes=["Z00.00"]
+            )
+            c5 = Claim(
+                claim_id="CLM2005", 
+                patient_member_id="MEM1005", 
+                provider_id="NPI1000003", 
+                service_date=date(2023, 10, 15), 
+                claim_status="Pended", 
+                amount=4500,
+                cpt_codes=["27447"],
+                icd_codes=["M16.1"]
+            )
+            db.add_all([c1, c2, c3, c4, c5])
             db.commit()
             
             logger.info("Database seeded successfully.")

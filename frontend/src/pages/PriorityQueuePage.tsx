@@ -43,15 +43,15 @@ export function PriorityQueuePage({ currentUser }: { currentUser: any }) {
             const isHighRisk = item.routing_destination === "Senior Claims Analyst" || item.routing_destination?.includes("High")
             return (
               <div key={item.id} className="box" style={{ 
-                background: isHighRisk ? '#fef2f2' : '#f8fafc',
-                borderLeftColor: isHighRisk ? '#ef4444' : '#0f3d5e',
+                background: isHighRisk ? 'rgba(239, 68, 68, 0.1)' : 'rgba(30, 41, 59, 0.7)',
+                borderLeftColor: isHighRisk ? '#ef4444' : '#38bdf8',
                 padding: '15px'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h4 style={{ margin: '0 0 10px 0', color: isHighRisk ? '#991b1b' : '#0f3d5e', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => navigate(`/case/${item.case_id}`)}>
+                  <h4 style={{ margin: '0 0 10px 0', color: isHighRisk ? '#fca5a5' : '#38bdf8', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => navigate(`/case/${item.case_id}`)}>
                     Case: {item.case_id} - Queue Rank: #{index + 1}
                   </h4>
-                  <span className="badge" style={{ background: isHighRisk ? '#fee2e2' : '#e0f2fe', color: isHighRisk ? '#991b1b' : '#075985' }}>
+                  <span className="badge" style={{ background: isHighRisk ? 'rgba(239, 68, 68, 0.2)' : 'rgba(56, 189, 248, 0.15)', color: isHighRisk ? '#fca5a5' : '#38bdf8', border: isHighRisk ? '1px solid rgba(239,68,68,0.3)' : '1px solid rgba(56,189,248,0.3)' }}>
                     Confidence: {(item.confidence * 100).toFixed(0)}%
                   </span>
                 </div>

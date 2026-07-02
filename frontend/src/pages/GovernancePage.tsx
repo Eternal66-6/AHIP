@@ -36,8 +36,9 @@ export function GovernancePage({ currentUser }: { currentUser: any }) {
                 <td>{log.case_id}</td>
                 <td>
                   <span className="badge" style={{ 
-                    background: log.action.includes("OVERRIDE") ? '#fee2e2' : log.action.includes("ACCEPT") ? '#dcfce7' : '#e0f2fe',
-                    color: log.action.includes("OVERRIDE") ? '#991b1b' : log.action.includes("ACCEPT") ? '#166534' : '#075985'
+                    background: log.action.includes("OVERRIDE") ? 'rgba(239, 68, 68, 0.2)' : log.action.includes("ACCEPT") ? 'rgba(34, 197, 94, 0.2)' : 'rgba(56, 189, 248, 0.15)',
+                    color: log.action.includes("OVERRIDE") ? '#fca5a5' : log.action.includes("ACCEPT") ? '#86efac' : '#38bdf8',
+                    border: log.action.includes("OVERRIDE") ? '1px solid rgba(239,68,68,0.3)' : log.action.includes("ACCEPT") ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(56,189,248,0.3)'
                   }}>
                     {log.action}
                   </span>
