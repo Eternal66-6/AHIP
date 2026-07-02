@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AHIP - Phase 5 Learning Story</title>
+    <title>AHIP - Phase 6 Learning Story</title>
     <style>
         :root {
             --bg-base: #030712;
@@ -232,9 +232,9 @@
 
     <!-- Section 1: Cinematic Opening -->
     <div class="hero">
-        <span class="badge">AHIP Stage 5 Complete</span>
-        <h1>Decision Intelligence & Escalation</h1>
-        <p>Transforming backend JSON AI outputs into an actionable, Explainable Priority Queue for Operations Analysts.</p>
+        <span class="badge">AHIP Stage 6 Complete</span>
+        <h1>Enterprise Governance & Audit</h1>
+        <p>Providing immutable trace logs, role-based access control, and manual override justifications to ensure Agentic AI is enterprise-compliant.</p>
     </div>
 
     <div class="container">
@@ -242,11 +242,11 @@
         <section>
             <h2>🚀 The Journey So Far</h2>
             <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
-                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P2: Agents</div>
                 <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P3: Context Engine</div>
                 <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P4: Agent Collab</div>
-                <div style="background: var(--primary); color: #000; font-weight: bold; padding: 10px; border-radius: 5px;">P5: Decision UI</div>
-                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P6: Governance</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P5: Decision UI</div>
+                <div style="background: var(--primary); color: #000; font-weight: bold; padding: 10px; border-radius: 5px;">P6: Governance</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P7: Future State</div>
             </div>
         </section>
 
@@ -254,7 +254,7 @@
         <section>
             <h2>⚠️ The Problem Before This Stage</h2>
             <div class="card" style="border-left: 4px solid var(--danger);">
-                <p>The AI Agents generated brilliant, deeply reasoned insights, but they were trapped as raw JSON text in backend logs. Operations teams can't work out of a JSON terminal. They needed a sorted, human-readable workflow.</p>
+                <p>The AI and Human users could accept or override cases, but there was no permanent record. If an auditor asked "Why did John Doe override the AI on this Claim?", there was no log, no reason tracked, and no security gating the action.</p>
             </div>
         </section>
 
@@ -263,16 +263,16 @@
             <h2>🛠️ What We Built</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>⚖️ Priority Queue API</h3>
-                    <p>Built a custom sorting algorithm via a `GET /priority-queue` API that ranks AI-analyzed cases dynamically based on SLA severity.</p>
+                    <h3>🔒 Role-Based Access (RBAC)</h3>
+                    <p>Secured the system so that only active users with the `Compliance Officer` role can view the Enterprise Audit Trail.</p>
                 </div>
                 <div class="card">
-                    <h3>🖼️ Explainable AI UI</h3>
-                    <p>Built a stunning React UI section that styles "High Risk" cases in red, displays AI confidence scores, and explicitly lists the "Why" behind the AI's routing destination.</p>
+                    <h3>✍️ Override Justifications</h3>
+                    <p>Forced a UI prompt interrupting the user when they click Override, requiring them to type a strict reason before the API accepts the payload.</p>
                 </div>
                 <div class="card">
-                    <h3>🧑‍💻 Human-In-The-Loop</h3>
-                    <p>Added Accept and Override action buttons, giving the human the ultimate final say over the AI's recommendation.</p>
+                    <h3>🗄️ Immutable Audit Logs</h3>
+                    <p>Created a new Database table (`AuditLog`) to permanently track both System Agent execution traces and Human actions.</p>
                 </div>
             </div>
         </section>
@@ -282,19 +282,19 @@
             <h2>🔄 Before vs After</h2>
             <div class="comparison">
                 <div class="before-panel">
-                    <h3 style="color: var(--danger)">Before Phase 5</h3>
+                    <h3 style="color: var(--danger)">Before Phase 6</h3>
                     <ul>
-                        <li>AI findings were hidden in database rows</li>
-                        <li>No sorting or urgency prioritization</li>
-                        <li>No way for humans to interact with the AI decision</li>
+                        <li>AI Decisions were ephemeral</li>
+                        <li>Overriding AI was silent (no reason required)</li>
+                        <li>No compliance visibility</li>
                     </ul>
                 </div>
                 <div class="after-panel">
-                    <h3 style="color: var(--success)">After Phase 5</h3>
+                    <h3 style="color: var(--success)">After Phase 6</h3>
                     <ul>
-                        <li>Visual, ranked dashboard queue</li>
-                        <li>High Risk SLA cases forced to the top</li>
-                        <li>One-click Accept/Override capability</li>
+                        <li>Every Agent execution is logged permanently</li>
+                        <li>Human overrides require text justification</li>
+                        <li>Secure dashboard restricted to Compliance roles</li>
                     </ul>
                 </div>
             </div>
@@ -303,18 +303,23 @@
         <!-- Section 6: Real Implementation View -->
         <section>
             <h2>💻 Implementation Highlights</h2>
-            <p>From the Repomix context, here is how the Priority Queue sorts Risk in Python:</p>
-            <pre><code>@router.get("/priority-queue")
-def get_priority_queue(db: Session = Depends(get_db)):
-    logs = db.query(AgentExecutionLog).filter(AgentExecutionLog.agent_name == "Consolidator Agent").all()
+            <p>From the Repomix context, here is how we secured the `POST /decision` endpoint to require justifications and track users:</p>
+            <pre><code>@router.post("/cases/{case_id}/decision")
+def submit_decision(case_id: str, request: DecisionRequest, db: Session = Depends(get_db)):
+    <span class="code-highlight"># 1. Update the AI's state</span>
+    log.decision_status = "ACCEPTED" if request.action == "Accept" else "OVERRIDDEN"
+    log.decision_reason = request.reason
+    log.decided_by = request.user_id
     
-    <span class="code-highlight"># Sort logic: High risk items return 0, Low risk return 1, ensuring High Risk floats to the top</span>
-    def sort_key(log):
-        is_high_risk = "Senior Claims Analyst" in (log.related_workflow_event or "") 
-        return (<span class="code-highlight">0 if is_high_risk else 1</span>, log.created_at)
-        
-    sorted_logs = sorted(unique_logs, key=sort_key)
-    return sorted_logs</code></pre>
+    <span class="code-highlight"># 2. Immutable Ledger Entry</span>
+    audit = AuditLog(
+        case_id=case_id,
+        action="DECISION_OVERRIDDEN",
+        actor=f"{request.user_id} ({request.user_role})",
+        details=f"Action: {request.action} | Reason: {request.reason}"
+    )
+    db.add(audit)
+    db.commit()</code></pre>
         </section>
 
         <!-- Section 7: Learning Outcomes -->
@@ -323,7 +328,7 @@ def get_priority_queue(db: Session = Depends(get_db)):
             <div class="grid">
                 <div class="card">
                     <h3>Agentic AI Learning</h3>
-                    <p><strong>Explainability & Trust:</strong> An AI system is only as good as its user adoption. By exposing the AI's reasoning (Explainability Notes) alongside clear "Accept/Override" buttons, we build trust and keep the human firmly in the loop.</p>
+                    <p><strong>Enterprise Adoption:</strong> Without observability and accountability, no enterprise will adopt an AI system. Audit logs are the bridge that allows compliance teams to safely deploy autonomous workflows.</p>
                 </div>
             </div>
         </section>
@@ -331,7 +336,7 @@ def get_priority_queue(db: Session = Depends(get_db)):
         <!-- Section 10: Quick Recap -->
         <section>
             <h2>⏱️ 60-Second Recap</h2>
-            <p>In Phase 5, we bridged the gap between backend AI intelligence and frontend operations. We built a dynamic, sorted Priority Queue that highlights critical SLA risks and gives Operations Analysts the power to easily understand, accept, or override AI routing decisions.</p>
+            <p>In Phase 6, we made the AHIP platform enterprise-ready. We added immutable Audit Logging to track exactly what the AI did, and we implemented Role-Based Access Control and Override Justifications to ensure that every time a human alters the AI's routing, they leave a permanent footprint for compliance auditors.</p>
         </section>
     </div>
 </body>
