@@ -52,6 +52,12 @@ The research and analysis deliverables for Phase 0 are documented here:
 - ✅ Designed the React **Priority Queue Dashboard** to provide operations analysts with deep explainability for AI routing decisions.
 - ✅ Implemented human-in-the-loop validation via a `POST /decision` API allowing users to Accept or Override the AI's recommendation.
 
+### Phase 6: Enterprise Governance & Audit
+- ✅ Added an `AuditLog` table and `decision_status` fields to provide an immutable trail for all AI and human actions.
+- ✅ Implemented Role-Based Access Control (RBAC), gating the Governance Dashboard to Compliance Officer roles.
+- ✅ Captured manual override workflows with explicit justification requirements in the API.
+- ✅ Built a live React **Enterprise Governance & Audit Trail** dashboard mapping every system trace to its responsible agent or human operator.
+
 ## What AHIP Is
 
 AHIP is an Agentic Healthcare Operations Intelligence Platform.

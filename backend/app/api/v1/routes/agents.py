@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.infrastructure.database.session import get_db
-from app.infrastructure.database.models import AgentExecutionLog
+from app.infrastructure.database.models import AgentExecutionLog, AuditLog
 from app.domain.schemas.schemas import AgentRunRequest
 from app.application.agents.orchestrator import WorkflowOrchestrator
 
@@ -9,7 +9,22 @@ router = APIRouter()
 
 @router.post("/run-case-review")
 def run_case_review(request: AgentRunRequest, db: Session = Depends(get_db)):
-    return WorkflowOrchestrator(db).run_case_review(request.case_id)
+    # Run the orchestrator
+    result = WorkflowOrchestrator(db).run_case_review(request.case_id)
+    
+    # Audit log the execution
+    import datetime
+    audit = AuditLog(
+        case_id=request.case_id,
+        action="AGENT_EXECUTION",
+        actor="System",
+        details="Multi-Agent Pipeline executed and generated a Consolidated Output.",
+        created_at=datetime.datetime.utcnow().isoformat()
+    )
+    db.add(audit)
+    db.commit()
+    
+    return result
 
 @router.get("/logs")
 def get_agent_logs(db: Session = Depends(get_db)):
@@ -80,10 +95,55 @@ def get_priority_queue(db: Session = Depends(get_db)):
 
 @router.post("/cases/{case_id}/decision")
 def submit_decision(case_id: str, request: DecisionRequest, db: Session = Depends(get_db)):
-    # Mock endpoint for accepting or overriding the AI recommendation
+    import datetime
+    
+    # 1. Update the AgentExecutionLog decision status
+    # We find the most recent Consolidator Agent log for this case
+    log = db.query(AgentExecutionLog).filter(
+        AgentExecutionLog.case_id == case_id,
+        AgentExecutionLog.agent_name == "Consolidator Agent"
+    ).order_by(AgentExecutionLog.created_at.desc()).first()
+    
+    if log:
+        log.decision_status = "ACCEPTED" if request.action == "Accept" else "OVERRIDDEN"
+        log.decision_reason = request.reason
+        log.decided_by = request.user_id or "Anonymous"
+    
+    # 2. Add an AuditLog for the decision
+    action_type = "DECISION_ACCEPTED" if request.action == "Accept" else "DECISION_OVERRIDDEN"
+    actor_name = f"{request.user_id or 'Unknown'} ({request.user_role or 'No Role'})"
+    details_str = f"Action: {request.action}"
+    if request.reason:
+        details_str += f" | Reason: {request.reason}"
+        
+    audit = AuditLog(
+        case_id=case_id,
+        action=action_type,
+        actor=actor_name,
+        details=details_str,
+        created_at=datetime.datetime.utcnow().isoformat()
+    )
+    db.add(audit)
+    db.commit()
+    
     return {
         "status": "success",
         "case_id": case_id,
         "decision": request.action,
         "message": f"Successfully recorded '{request.action}' for case {case_id}."
     }
+
+@router.get("/audit-logs")
+def get_audit_logs(db: Session = Depends(get_db)):
+    logs = db.query(AuditLog).order_by(AuditLog.created_at.desc()).all()
+    return [
+        {
+            "id": log.id,
+            "case_id": log.case_id,
+            "action": log.action,
+            "actor": log.actor,
+            "details": log.details,
+            "created_at": log.created_at
+        }
+        for log in logs
+    ]

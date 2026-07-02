@@ -45,3 +45,17 @@ class AgentExecutionLog(Base):
     confidence = Column(Float)
     related_workflow_event = Column(String, nullable=True)
     created_at = Column(String) # We'll just store ISO strings for simplicity, or use DateTime. Let's use String for SQLite ease.
+    
+    # Phase 6 Governance fields
+    decision_status = Column(String, default="PENDING") # PENDING, ACCEPTED, OVERRIDDEN
+    decision_reason = Column(String, nullable=True)
+    decided_by = Column(String, nullable=True)
+
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    case_id = Column(String, index=True)
+    action = Column(String) # e.g. "AGENT_EXECUTION", "DECISION_ACCEPTED", "DECISION_OVERRIDDEN"
+    actor = Column(String) # e.g. "Consolidator Agent", or Human User ID
+    details = Column(String)
+    created_at = Column(String)

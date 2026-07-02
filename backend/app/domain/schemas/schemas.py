@@ -75,3 +75,14 @@ class ConsolidatedCaseOutput(BaseModel):
 
 class DecisionRequest(BaseModel):
     action: str  # "Accept" or "Override"
+    reason: str | None = None
+    user_id: str | None = None
+    user_role: str | None = None
+
+class AuditLogResponse(BaseModel):
+    id: int
+    case_id: str
+    action: str
+    actor: str
+    details: str
+    created_at: str

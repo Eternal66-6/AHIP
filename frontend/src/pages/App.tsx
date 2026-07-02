@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders, getCaseContextMapping, getPriorityQueue, submitDecision } from '../api/client'
+import { getDashboardSummary, runCaseReview, getPatients, getClaims, getProviders, getCaseContextMapping, getPriorityQueue, submitDecision, getAuditLogs } from '../api/client'
 import { MetricCard } from '../components/MetricCard'
 import type { DashboardSummary, Patient, Claim, Provider } from '../types/ahip'
 
@@ -14,8 +14,12 @@ export function App() {
   const [contextMapping, setContextMapping] = useState<any>(null)
   const [caseIdInput, setCaseIdInput] = useState('CLM2001')
 
-  // Phase 5 Queue state
+  // Phase 6 Queue state
   const [priorityQueue, setPriorityQueue] = useState<any[]>([])
+  
+  // Phase 6 Governance state
+  const [auditLogs, setAuditLogs] = useState<any[]>([])
+  const [currentUser] = useState({ name: "John Doe", role: "Compliance Officer", id: "U-8899" })
 
   useEffect(() => {
     getDashboardSummary().then(setSummary).catch(console.error)
@@ -23,6 +27,7 @@ export function App() {
     getClaims().then(setClaims).catch(console.error)
     getProviders().then(setProviders).catch(console.error)
     getPriorityQueue().then(setPriorityQueue).catch(console.error)
+    getAuditLogs().then(setAuditLogs).catch(console.error)
   }, [])
 
   async function handleRunAgents() {
@@ -37,9 +42,17 @@ export function App() {
 
   async function handleDecision(caseId: string, action: string) {
     try {
-      await submitDecision(caseId, action)
+      let reason = ""
+      if (action === "Override") {
+        reason = window.prompt(`Enter reason for manual override on ${caseId}:`) || "No reason provided"
+      }
+      
+      await submitDecision(caseId, action, reason, currentUser.id, currentUser.role)
       // Optimistically remove it from UI queue
       setPriorityQueue(prev => prev.filter(item => item.case_id !== caseId))
+      
+      // Refresh audit logs to show the new decision
+      getAuditLogs().then(setAuditLogs).catch(console.error)
       alert(`Decision recorded: ${action} for ${caseId}`)
     } catch (e) {
       console.error(e)
@@ -245,6 +258,49 @@ export function App() {
                 )
               })}
             </div>
+          )}
+        </section>
+
+        <section className="section">
+          <h3>Phase 6: Enterprise Governance & Audit Trail</h3>
+          <p>Full agent execution trace and manual override history. Visible only to Compliance Officers and Admins.</p>
+          
+          <div style={{ marginBottom: '15px' }}>
+            <strong>Active User:</strong> {currentUser.name} | <strong>Role:</strong> {currentUser.role}
+          </div>
+
+          {currentUser.role === "Compliance Officer" ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Case ID</th>
+                  <th>Action</th>
+                  <th>Actor</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {auditLogs.map(log => (
+                  <tr key={log.id}>
+                    <td>{new Date(log.created_at).toLocaleString()}</td>
+                    <td>{log.case_id}</td>
+                    <td>
+                      <span className="badge" style={{ 
+                        background: log.action.includes("OVERRIDE") ? '#fee2e2' : log.action.includes("ACCEPT") ? '#dcfce7' : '#e0f2fe',
+                        color: log.action.includes("OVERRIDE") ? '#991b1b' : log.action.includes("ACCEPT") ? '#166534' : '#075985'
+                      }}>
+                        {log.action}
+                      </span>
+                    </td>
+                    <td>{log.actor}</td>
+                    <td>{log.details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="alert-warning">You do not have permission to view the audit trail. Requires Compliance Officer role.</div>
           )}
         </section>
 

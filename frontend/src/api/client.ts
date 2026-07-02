@@ -46,12 +46,18 @@ export async function getPriorityQueue() {
   return response.json()
 }
 
-export async function submitDecision(caseId: string, action: string) {
+export async function submitDecision(caseId: string, action: string, reason?: string, userId?: string, userRole?: string) {
   const response = await fetch(`${API_BASE_URL}/agents/cases/${caseId}/decision`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ action })
+    body: JSON.stringify({ action, reason, user_id: userId, user_role: userRole })
   })
   if (!response.ok) throw new Error('Failed to submit decision')
+  return response.json()
+}
+
+export async function getAuditLogs() {
+  const response = await fetch(`${API_BASE_URL}/agents/audit-logs`)
+  if (!response.ok) throw new Error('Failed to load audit logs')
   return response.json()
 }
