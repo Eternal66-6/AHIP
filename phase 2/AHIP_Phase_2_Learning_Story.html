@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHIP - Phase 2 Learning Story</title>
+    <style>
+        :root {
+            --bg-base: #030712;
+            --bg-surface: #0B1117;
+            --bg-card: #111827;
+            --border: #1F2937;
+            --primary: #38BDF8;
+            --secondary: #818CF8;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --font-sans: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Cinematic Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Glassmorphism Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        /* Before/After */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: var(--bg-surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .before-panel { border-left: 4px solid var(--danger); padding-left: 1rem; }
+        .after-panel { border-left: 4px solid var(--success); padding-left: 1rem; }
+
+        /* Animated Workflow */
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 3rem 1rem;
+            background: var(--bg-surface);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .node {
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            position: relative;
+            animation: pulse 3s infinite;
+        }
+
+        .arrow {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            animation: slideRight 2s infinite;
+        }
+
+        /* Code & Highlighting */
+        pre {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+        
+        .code-highlight { color: var(--primary); font-weight: bold; }
+
+        /* Q&A Accordion */
+        .qa-item {
+            margin-bottom: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .qa-q {
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        .qa-a {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Alerts */
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        }
+        @keyframes slideRight {
+            0% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(10px); opacity: 1; }
+            100% { transform: translateX(0); opacity: 0.5; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Cinematic Opening -->
+    <div class="hero">
+        <span class="badge">AHIP Stage 2 Complete</span>
+        <h1>First Agents</h1>
+        <p>Introducing specialized AI agents to analyze healthcare data and output structured, memory-backed execution logs.</p>
+    </div>
+
+    <div class="container">
+        <!-- Stage Timeline -->
+        <section>
+            <h2>🚀 The Journey So Far</h2>
+            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P1: Data Foundation</div>
+                <div style="background: var(--primary); color: #000; font-weight: bold; padding: 10px; border-radius: 5px;">P2: First Agents</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P3: Context Engine</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P4: Agent Collaboration</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P5: Decision Intelligence</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Problem Before -->
+        <section>
+            <h2>⚠️ The Problem Before This Stage</h2>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <p>We had a database full of healthcare records, but no intelligence analyzing it. Humans would have to manually review every claim and patient profile to make operational decisions.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: What We Built -->
+        <section>
+            <h2>🛠️ What We Built</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>🤖 3 Specialized Agents</h3>
+                    <p>Built PatientJourneyAgent, ClaimsReviewAgent, and ProviderContractAgent.</p>
+                </div>
+                <div class="card">
+                    <h3>📝 Agent Execution Log</h3>
+                    <p>Created a database table to permanently store every agent's observation, recommendation, and confidence score.</p>
+                </div>
+                <div class="card">
+                    <h3>📦 Structured Outputs</h3>
+                    <p>Forced agents to return `AgentOutput` Pydantic schemas instead of raw conversational text.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Before vs After -->
+        <section>
+            <h2>🔄 Before vs After</h2>
+            <div class="comparison">
+                <div class="before-panel">
+                    <h3 style="color: var(--danger)">Before Phase 2</h3>
+                    <ul>
+                        <li>No AI integration</li>
+                        <li>Manual data analysis only</li>
+                        <li>No automated recommendations</li>
+                    </ul>
+                </div>
+                <div class="after-panel">
+                    <h3 style="color: var(--success)">After Phase 2</h3>
+                    <ul>
+                        <li>Automated, domain-specific AI analysis</li>
+                        <li>Structured JSON outputs</li>
+                        <li>Database-backed execution logs</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: How It Works -->
+        <section>
+            <h2>⚙️ How It Works</h2>
+            <div class="workflow">
+                <div class="node">Raw DB Record</div>
+                <div class="arrow">→</div>
+                <div class="node" style="border-color: var(--primary)">Specialized Agent</div>
+                <div class="arrow">→</div>
+                <div class="node">AgentOutput Schema</div>
+                <div class="arrow">→</div>
+                <div class="node" style="border-color: var(--success)">AgentExecutionLog DB Table</div>
+            </div>
+        </section>
+
+        <!-- Section 6: Real Implementation View -->
+        <section>
+            <h2>💻 Implementation Highlights</h2>
+            <p>From the Repomix context, here is our strict Pydantic output schema:</p>
+            <pre><code>class AgentOutput(BaseModel):
+    agent_name: str
+    case_id: str
+    risk_level: str
+    <span class="code-highlight">observation: str</span>
+    <span class="code-highlight">recommendation: str</span>
+    <span class="code-highlight">evidence: List[str]</span>
+    confidence: float
+    next_owner: str</code></pre>
+        </section>
+
+        <!-- Section 7: Learning Outcomes -->
+        <section>
+            <h2>🎓 What I Learned</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Agentic AI Learning</h3>
+                    <p><strong>Structured Outputs:</strong> AI in enterprise isn't a chatbot. It's a microservice. By forcing the LLM (or mock agent) to return strict Pydantic JSON, we can save its reasoning into a relational database.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Demo Guide -->
+        <section>
+            <h2>🎬 Demo Guide</h2>
+            <div class="alert-warning">
+                <strong>Your Demo Script:</strong><br><br>
+                1. <strong>Run the Agents:</strong> Click the 'Run Agents' button on the React dashboard.<br>
+                2. <strong>Show the Logs:</strong> "Watch as the Patient Agent, Claims Agent, and Provider Agent run in parallel. They aren't chatting; they are writing structured `AgentOutput` schemas straight into our Postgres `AgentExecutionLog` table."
+            </div>
+        </section>
+
+        <!-- Section 9: Interview Q&A -->
+        <section>
+            <h2>🎙️ Interview Q&A</h2>
+            <div class="qa-item">
+                <div class="qa-q">Q: Why use multiple specialized agents instead of one big agent?</div>
+                <div class="qa-a">A: Separation of concerns. A Claims Agent evaluates financial risk, while a Patient Agent evaluates clinical journey. Smaller, focused agents are easier to test, debug, and scale than monolithic prompts.</div>
+            </div>
+        </section>
+
+        <!-- Section 10: Quick Recap -->
+        <section>
+            <h2>⏱️ 60-Second Recap</h2>
+            <p>In Phase 2, we introduced Agentic AI to AHIP. We built three distinct agents and forced them to output strictly typed JSON (AgentOutput) which gets saved permanently to an AgentExecutionLog table, turning AI from a conversational tool into an operational backend service.</p>
+        </section>
+
+        <!-- Section 11: Next Episode -->
+        <section style="text-align: center; padding-bottom: 6rem;">
+            <h2>🔜 Next Episode Trailer</h2>
+            <p style="font-size: 1.2rem; color: var(--text-secondary);">
+                Our agents are running, but right now they are querying the raw, noisy database directly.<br>
+                How do we filter out the noise and give them perfectly tailored context?
+            </p>
+            <p style="font-weight: bold; color: var(--primary); margin-top: 1rem;">Coming next: Context & Knowledge Layer.</p>
+        </section>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHIP - Phase 3 Learning Story</title>
+    <style>
+        :root {
+            --bg-base: #030712;
+            --bg-surface: #0B1117;
+            --bg-card: #111827;
+            --border: #1F2937;
+            --primary: #38BDF8;
+            --secondary: #818CF8;
+            --success: #22C55E;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --font-sans: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Cinematic Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Glassmorphism Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        /* Before/After */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: var(--bg-surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .before-panel { border-left: 4px solid var(--danger); padding-left: 1rem; }
+        .after-panel { border-left: 4px solid var(--success); padding-left: 1rem; }
+
+        /* Animated Workflow */
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 3rem 1rem;
+            background: var(--bg-surface);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .node {
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            position: relative;
+            animation: pulse 3s infinite;
+        }
+
+        .arrow {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            animation: slideRight 2s infinite;
+        }
+
+        /* Code & Highlighting */
+        pre {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+        
+        .code-highlight { color: var(--primary); font-weight: bold; }
+
+        /* Q&A Accordion */
+        .qa-item {
+            margin-bottom: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .qa-q {
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        .qa-a {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Alerts */
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        }
+        @keyframes slideRight {
+            0% { transform: translateX(0); opacity: 0.5; }
+            50% { transform: translateX(10px); opacity: 1; }
+            100% { transform: translateX(0); opacity: 0.5; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Section 1: Cinematic Opening -->
+    <div class="hero">
+        <span class="badge">AHIP Stage 3 Complete</span>
+        <h1>Context & Knowledge Layer</h1>
+        <p>Minimizing hallucinations by protecting AI Agents from raw database dumps. Introducing strict, tailored Context Packs.</p>
+    </div>
+
+    <div class="container">
+        <!-- Stage Timeline -->
+        <section>
+            <h2>🚀 The Journey So Far</h2>
+            <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P1: Data Foundation</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P2: First Agents</div>
+                <div style="background: var(--primary); color: #000; font-weight: bold; padding: 10px; border-radius: 5px;">P3: Context Engine</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P4: Agent Collaboration</div>
+                <div style="opacity: 0.5; padding: 10px; border: 1px solid var(--border); border-radius: 5px;">P5: Decision Intelligence</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Problem Before -->
+        <section>
+            <h2>⚠️ The Problem Before This Stage</h2>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <p>Agents were querying the database directly and receiving full raw table rows. Giving an AI too much irrelevant information causes token bloat, increased latency, and severe hallucinations.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: What We Built -->
+        <section>
+            <h2>🛠️ What We Built</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>📦 Pydantic Context Packs</h3>
+                    <p>Created `PatientContextPack`, `ClaimContextPack`, and `ProviderContextPack` schemas that strip away PII and irrelevant database columns.</p>
+                </div>
+                <div class="card">
+                    <h3>🏗️ HealthcareContextBuilder</h3>
+                    <p>A dedicated service class that acts as a secure proxy between the database and the Agents.</p>
+                </div>
+                <div class="card">
+                    <h3>🕸️ Knowledge Graph UI</h3>
+                    <p>Built a React visualizer showing exactly how a single Case ID maps to its related Patient, Claim, and Provider context packs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Before vs After -->
+        <section>
+            <h2>🔄 Before vs After</h2>
+            <div class="comparison">
+                <div class="before-panel">
+                    <h3 style="color: var(--danger)">Before Phase 3</h3>
+                    <ul>
+                        <li>Agents read direct DB models</li>
+                        <li>High token usage</li>
+                        <li>Agents get distracted by irrelevant fields (e.g. internal primary keys)</li>
+                    </ul>
+                </div>
+                <div class="after-panel">
+                    <h3 style="color: var(--success)">After Phase 3</h3>
+                    <ul>
+                        <li>Agents receive minimized, strictly-typed Context Packs</li>
+                        <li>Lower latency, cheaper API calls</li>
+                        <li>Zero hallucinations regarding irrelevant data</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: How It Works -->
+        <section>
+            <h2>⚙️ How It Works</h2>
+            <div class="workflow">
+                <div class="node">Raw DB Record</div>
+                <div class="arrow">→</div>
+                <div class="node" style="border-color: var(--warning)">Context Builder</div>
+                <div class="arrow">→</div>
+                <div class="node" style="border-color: var(--success)">Context Pack</div>
+                <div class="arrow">→</div>
+                <div class="node" style="border-color: var(--primary)">Specialized Agent</div>
+            </div>
+        </section>
+
+        <!-- Section 6: Real Implementation View -->
+        <section>
+            <h2>💻 Implementation Highlights</h2>
+            <p>From the Repomix context, here is how the ContextBuilder protects the AI by formatting the context strictly:</p>
+            <pre><code>class HealthcareContextBuilder:
+    def build_case_context(self, db: Session, case_id: str) -> CaseContext:
+        <span class="code-highlight"># 1. Fetch raw DB models</span>
+        claim_model = db.query(ClaimModel).filter_by(case_id=case_id).first()
+        patient_model = db.query(PatientModel)...
+        
+        <span class="code-highlight"># 2. Filter down to Context Packs (removes PII, internal IDs)</span>
+        claim_pack = ClaimContextPack(
+            status=claim_model.status,
+            amount=claim_model.amount,
+            cpt_codes=claim_model.cpt_codes
+        )
+        
+        <span class="code-highlight"># 3. Return protected context to Agents</span>
+        return CaseContext(claim=claim_pack, patient=patient_pack...)</code></pre>
+        </section>
+
+        <!-- Section 7: Learning Outcomes -->
+        <section>
+            <h2>🎓 What I Learned</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Agentic AI Learning</h3>
+                    <p><strong>Context Minimization:</strong> You don't give an LLM the whole database. You build a "Context Engine" that acts as an API layer, supplying the agent with exactly what it needs to succeed, and nothing more.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Demo Guide -->
+        <section>
+            <h2>🎬 Demo Guide</h2>
+            <div class="alert-warning">
+                <strong>Your Demo Script:</strong><br><br>
+                1. <strong>Open the UI:</strong> Scroll down to the "Phase 3: Context & Knowledge Mapping" section.<br>
+                2. <strong>Load Context:</strong> Click "View Context Graph for CLM2001".<br>
+                3. <strong>Explain the Data:</strong> "Look at this JSON. Notice how there are no internal database IDs, no sensitive PII. The Context Engine has perfectly curated this `ContextPack` before handing it to the AI."
+            </div>
+        </section>
+
+        <!-- Section 9: Interview Q&A -->
+        <section>
+            <h2>🎙️ Interview Q&A</h2>
+            <div class="qa-item">
+                <div class="qa-q">Q: How do you prevent LLM hallucinations when reading from a database?</div>
+                <div class="qa-a">A: By implementing a Context Engine. I wrote a `HealthcareContextBuilder` that intercepts raw SQL database models and converts them into strictly typed, minimized Pydantic `ContextPacks`. The AI only ever sees the ContextPack.</div>
+            </div>
+        </section>
+
+        <!-- Section 10: Quick Recap -->
+        <section>
+            <h2>⏱️ 60-Second Recap</h2>
+            <p>In Phase 3, we stopped our agents from directly reading the database. We introduced Context Engineering by building a service that maps noisy DB models into clean, strict `ContextPacks`. This dramatically improves agent focus, reduces token usage, and prevents hallucinations.</p>
+        </section>
+
+        <!-- Section 11: Next Episode -->
+        <section style="text-align: center; padding-bottom: 6rem;">
+            <h2>🔜 Next Episode Trailer</h2>
+            <p style="font-size: 1.2rem; color: var(--text-secondary);">
+                Our agents have perfect data context, but they are still working entirely alone.<br>
+                What happens when the Claims Agent needs to know what the Patient Agent discovered?
+            </p>
+            <p style="font-weight: bold; color: var(--primary); margin-top: 1rem;">Coming next: Multi-Agent Collaboration.</p>
+        </section>
+
+    </div>
+</body>
+</html>
